@@ -1,21 +1,36 @@
 const User = require('../models/User')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const { StatusCodes } = require('http-status-codes')
+const { BadRequestError } = require('../errors')
 
 const register = async (req, res) => {
-  const { name, password, email } = req.body
+  const user = await User.create({...req.body})
+  const token = user.genJWT()
 
-  const salt = await bcrypt.genSalt(10)
-  const hashedPwd = await bcrypt.hash(password, salt)
-  const tempUser = { name, email, password: hashedPwd }
-
-  const token = jwt.sign({name, id: Date.now()}, process.env.JWT_SECRET, {expiresIn: '30d'})
-
-  res.status(201).json({name, token})
+  return res.status(StatusCodes.CREATED).json({ name: user.name, token })
 }
 
 const login = async (req, res) => {
-  res.status(200).json({msg: 'login user'})
+  const { email, password } = req.body
+
+  if(!email || !password) {
+    throw new BadRequestError('Email and Password must be provided')
+  }
+
+  const user = await User.findOne({ email })
+
+  if(!user) {
+    throw new BadRequestError('Invalid credentials')
+  }
+
+  const match = await user.compareVerifyPassword(password)
+
+  if(!match) {
+    throw new BadRequestError('Enter a valid password')
+  }
+
+  const token = user.genJWT()
+
+  res.status(StatusCodes.OK).json({name: user.name, token})
 }
 
 module.exports = {

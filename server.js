@@ -5,33 +5,31 @@ const express = require('express')
 const app = express()
 const PORT = process.env.PORT || 3500
 
-// connect db
+const { join } = require('path')
+
 const connectDB = require('./db/connect')
 
-// routes
 const authRouter = require('./routes/auth')
+const jobsRouter = require('./routes/job')
 
-// middleware
 const notFound = require('./middleware/not-found')
 const errorHandler = require('./middleware/error-handler')
+const authMiddleware = require('./middleware/authorize')
 
-// body-parser
+app.use(express.static(join(__dirname, 'public')))
 app.use(express.json())
 
-app.get('/', (req, res) => {
-  res.send('homepage')
-})
-
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/jobs', authMiddleware, jobsRouter)
 
 app.use(errorHandler)
 app.use(notFound)
 
 const start = (async () => {
   try {
+    await connectDB(process.env.MONGO_URI)
     app.listen(PORT, console.log(`http://localhost:${PORT}`))
   } catch (error) {
     console.log(error);
   }
-})
-start()
+})()
