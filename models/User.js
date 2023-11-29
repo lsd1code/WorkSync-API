@@ -50,8 +50,7 @@ UserSchema.methods.genJWT = function() {
 }
 
 UserSchema.methods.compareVerifyPassword = function(password) {
-  const isMatch = bcrypt.compare(password, this.password)
-  return isMatch
+  return bcrypt.compare(password, this.password)
 }
 
 module.exports = mongoose.model('User', UserSchema)
