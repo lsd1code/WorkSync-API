@@ -1,3 +1,6 @@
+const Job = require('../models/Job')
+const { NotFoundError } = require('../errors')
+
 const getJobs = async (req, res) => {
   res.json({...req.user})
 }

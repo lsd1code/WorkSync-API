@@ -12,21 +12,13 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body
 
-  if(!email || !password) {
-    throw new BadRequestError('Email and Password must be provided')
-  }
+  if(!email || !password) { throw new BadRequestError('Email and Password must be provided') }
 
   const user = await User.findOne({ email })
-
-  if(!user) {
-    throw new BadRequestError('Invalid credentials')
-  }
+  if(!user) { throw new BadRequestError('Invalid credentials') }
 
   const match = await user.compareVerifyPassword(password)
-
-  if(!match) {
-    throw new BadRequestError('Enter a valid password')
-  }
+  if(!match) { throw new BadRequestError('Enter a valid password') }
 
   const token = user.genJWT()
 

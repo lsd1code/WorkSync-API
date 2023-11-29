@@ -15,7 +15,8 @@ const auth = (req, res, next) => {
     req.user = {
       name: decoded.name,
       userId: decoded.userId
-    }    
+    }  
+      
     next()
   } catch (error) {
     throw new UnauthenticatedError('Invalid token')
