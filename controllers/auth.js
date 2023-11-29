@@ -11,7 +11,6 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body
-
   if(!email || !password) { throw new BadRequestError('Email and Password must be provided') }
 
   const user = await User.findOne({ email })
@@ -21,8 +20,7 @@ const login = async (req, res) => {
   if(!match) { throw new BadRequestError('Enter a valid password') }
 
   const token = user.genJWT()
-
-  res.status(StatusCodes.OK).json({name: user.name, token})
+  return res.status(StatusCodes.OK).json({name: user.name, token})
 }
 
 module.exports = {

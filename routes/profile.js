@@ -1,8 +1,8 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const { updateProfile } = require('../controllers/profile')
+const { updateProfile } = require('../controllers/profile');
 
-router.patch('/', updateProfile)
+router.patch('/', updateProfile);
 
-module.exports = router
+module.exports = router;
