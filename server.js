@@ -6,6 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3500;
 
 const { join } = require('path');
+const cors = require('cors');
 
 const connectDB = require('./db/connect');
 
@@ -16,6 +17,8 @@ const profileRouter = require('./routes/profile');
 const notFound = require('./middleware/not-found');
 const errorHandler = require('./middleware/error-handler');
 const authMiddleware = require('./middleware/authorize');
+
+app.use(cors());
 
 app.use(express.static(join(__dirname, 'public')));
 app.use(express.json());
