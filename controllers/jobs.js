@@ -4,15 +4,31 @@ const { NotFoundError } = require('../errors')
 
 const getJobs = async (req, res) => {
   const { userId } = req.user
-  const jobs = await Job.find({ createdBy: userId })
+  const { position, company, status, location, job_type } = req.query 
+
+  const queryObJ = {}
+
+  if(company) { queryObJ.company = { $regex: company, $options: 'i' } }
+
+  if(position) { queryObJ.position = { $regex: position, $options: 'i' } }
+
+  if(location) { queryObJ.location =  { $regex: location, $options: 'i' } }
   
-  res.json({ jobs, count: jobs.length })
+  if(status) { queryObJ.status = status }
+
+  if(job_type) { queryObJ.job_type = job_type }
+  
+  const jobs = await Job
+    .find({ createdBy: userId, ...queryObJ })
+    .sort('-createdAt')
+
+  return res.json({ jobs, count: jobs.length })
 }
 
 const getJob = async (req, res) => {
   const { userId } = req.user
-  const { id } = req.params
-  const job = await Job.findOne({ createdBy: userId, _id: id })
+  const { id: JobId } = req.params
+  const job = await Job.findOne({ createdBy: userId, _id: JobId })
 
   if(!job) {
     throw new NotFoundError(`Job ${id} not found`)

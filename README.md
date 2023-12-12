@@ -1,7 +1,5 @@
 # Job Tracker API
 
-[One-sentence project description]
-
 ## Features
 
 - Register new user
@@ -24,4 +22,4 @@ This project is ISC licenced
 ## Contact
 
 [twitter](https://www.twitter.com/)
-[github](https://www.github.com/)
+[github](https://www.github.com/lsd1code)
