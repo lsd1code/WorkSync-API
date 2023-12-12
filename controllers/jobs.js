@@ -57,7 +57,7 @@ const updateJob = async (req, res) => {
     throw new NotFoundError(`Job ${id} not found`)
   }
 
-  res.status(StatusCodes.OK).json({success: true, msg: `Job ${id} updated succesfully`})
+  res.status(StatusCodes.OK).json({success: true, msg: `Job updated succesfully`})
 }
 
 const deleteJob = async (req, res) => {
@@ -69,7 +69,7 @@ const deleteJob = async (req, res) => {
     throw new NotFoundError(`Job ${id} not found`)
   }
 
-  res.status(StatusCodes.OK).json({success: true, msg: `Job ${id} deleted succesfully`})
+  res.status(StatusCodes.OK).json({success: true, msg: `Job deleted succesfully`})
 }
 
 module.exports = {
